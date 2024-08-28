@@ -46,6 +46,7 @@ Thumbs.db
 # Virtual environment directories
 venv/
 env/
+emb-env/
 
 # Python environment configuration
 *.env
