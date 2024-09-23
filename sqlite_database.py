@@ -7,11 +7,29 @@ class SqliteDatabase(Database):
         self.conn = sqlite3.connect(file_path)
         self.cursor = self.conn.cursor()
 
-    def select():
-        pass
+    def fetch(self, table, query):
+        entries = []
+        data = {}
+        table_data = self.cursor.execute("PRAGMA table_info(" + table + ");").fetchall()
 
-    def list(self):
-        pass
+        # Returns data describing the table, in order:
+        # cid | name | type | notnull | dflt_value | pk
+
+        rows = self.cursor.execute(query).fetchall()
+
+        for row in rows:
+            for column in range(0, len(row)):
+                data[table_data[column][1]] = row[column]
+            
+            entries.append(data)
+        
+        return entries
+
+    def select(self, table, columns, value_query):
+        return self.fetch(table, "SELECT " + columns + " FROM " + table + " WHERE " + value_query + ";")
+
+    def list(self, table):
+        return self.fetch(table, "SELECT * FROM " + table + ";")
 
     def create_table(self, table, data):
         columns_str_builder = CSSBuilder()
@@ -45,9 +63,8 @@ class SqliteDatabase(Database):
 
     def does_table_exist(self, table):
         try:
-            tables = self.cursor.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='" + table + "';").fetchall()
-
-            return tables != []
+            tables = self.cursor.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='" + table + "';").fetchone()
+            return tables[0] != 0
         except:
             print("SqliteDatabase: An error occurred while attempting to check whether the table " + table + " exists.")
 
