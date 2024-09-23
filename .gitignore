@@ -50,3 +50,6 @@ emb-env/
 
 # Python environment configuration
 *.env
+
+# SQLite database files
+*.db
