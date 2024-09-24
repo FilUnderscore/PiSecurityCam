@@ -1,69 +1,43 @@
-from database import Database
-from util import CSSBuilder
+from sql_database import SQLDatabase
 import sqlite3
 
-class SqliteDatabase(Database):
+class SqliteDatabase(SQLDatabase):
     def __init__(self, file_path):
-        self.conn = sqlite3.connect(file_path)
-        self.cursor = self.conn.cursor()
+        SQLDatabase.__init__(self, sqlite3.connect(file_path))
 
-    def fetch(self, table, query):
-        entries = []
-        data = {}
-        table_data = self.cursor.execute("PRAGMA table_info(" + table + ");").fetchall()
+    def get_table_data(self, table):
+        cursor = self.conn.cursor()
+        table_data = cursor.execute("PRAGMA table_info(" + table + ");").fetchall()
 
         # Returns data describing the table, in order:
         # cid | name | type | notnull | dflt_value | pk
 
-        rows = self.cursor.execute(query).fetchall()
-
-        for row in rows:
-            for column in range(0, len(row)):
-                data[table_data[column][1]] = row[column]
-            
-            entries.append(data)
+        table_col_list = []
         
-        return entries
+        for column in range(0, len(table_data)):
+            col_data = {
+                "name": table_data[column][1]
+            }
 
-    def select(self, table, columns, value_query):
-        return self.fetch(table, "SELECT " + columns + " FROM " + table + " WHERE " + value_query + ";")
-
-    def list(self, table):
-        return self.fetch(table, "SELECT * FROM " + table + ";")
+            table_col_list.append(col_data)
+        
+        return table_col_list
 
     def create_table(self, table, data):
-        columns_str_builder = CSSBuilder()
-
-        for column_key in data:
-            columns_str_builder.add_entry(column_key).extend_entry(self.get_db_type(data[column_key]))
-
-        self.cursor.execute("CREATE TABLE " + table + " (" + columns_str_builder.build() + ");")
-        self.conn.commit()
+        SQLDatabase.create_table(self, table, data)
 
         print("SqliteDatabase: Created new table '" + table + "'")
 
     def insert(self, table, data):
-        if not self.does_table_exist(table):
-            self.create_table(table, data)
-
-        keys_str_builder = CSSBuilder()
-
-        for key in data:
-            keys_str_builder.add_entry(key)
-        
-        values_str_builder = CSSBuilder()
-
-        for key in data:
-            values_str_builder.add_entry('\'' + data[key] + '\'')
-
-        self.cursor.execute("INSERT INTO " + table + " (" + keys_str_builder.build() + ") VALUES (" + values_str_builder.build() + ")")
-        self.conn.commit()
+        SQLDatabase.insert(self, table, data)
 
         print("SqliteDatabase: Inserted row into the '" + table + "' table.")
 
     def does_table_exist(self, table):
+        cursor = self.conn.cursor()
+
         try:
-            tables = self.cursor.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='" + table + "';").fetchone()
+            tables = cursor.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='" + table + "';").fetchone()
             return tables[0] != 0
         except:
             print("SqliteDatabase: An error occurred while attempting to check whether the table " + table + " exists.")
