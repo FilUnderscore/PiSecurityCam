@@ -10,6 +10,8 @@ Description: Use HOG model stored in xml file to draw boxes on the moving object
 import cv2
 import time
 
+print(cv2.__version__)
+
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 cap = cv2.VideoCapture("video.mov")
@@ -17,7 +19,7 @@ while True:
     r, frame = cap.read()
     if r:
         start_time = time.time()
-        frame = cv2.resize(frame,(1280, 720)) # Downscale to improve frame rate
+        frame = cv2.resize(frame,(320, 240)) # Downscale to improve frame rate
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # HOG needs a grayscale image
 
         rects, weights = hog.detectMultiScale(gray_frame)
@@ -27,7 +29,7 @@ while True:
         print("Elapsed time:", end_time-start_time)
         
         for i, (x, y, w, h) in enumerate(rects):
-            if weights[i] < 0.7:
+            if weights[i] < 0.8:
                 continue
             cv2.rectangle(frame, (x,y), (x+w,y+h),(0,255,0),2)
 

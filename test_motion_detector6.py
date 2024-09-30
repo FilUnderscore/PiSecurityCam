@@ -1,3 +1,4 @@
+# using live 
 import cv2
 import time
 from picamera2 import Picamera2
@@ -18,7 +19,7 @@ while True:
         start_time = time.time()
 
         # Resize frame to improve frame rate (optional)
-        frame = cv2.resize(frame, (1280, 720))
+        frame = cv2.resize(frame, (640, 320))
 
         # Convert frame to grayscale for HOG detector
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
