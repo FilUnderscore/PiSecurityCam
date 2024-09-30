@@ -1,4 +1,5 @@
 """
+Status: Not tested
 Title: Human walking motion detection
 Author: Daniel
 Description: Use haarcascade full body AI model stored as xml file to draw boxes on the moving object

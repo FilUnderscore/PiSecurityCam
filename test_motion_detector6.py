@@ -1,5 +1,5 @@
 """
-Status:
+Status: Not tested properly yet
 Title: Human walking motion detection
 Author: Daniel
 Description: Use HOG model stored in xml file to draw boxes on the moving object
@@ -21,7 +21,7 @@ hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 picam2 = Picamera2()
 
 # Configure the camera to the desired resolution
-camera_config = picam2.create_preview_configuration(main={"size": (1280, 720)})
+camera_config = picam2.create_preview_configuration(main={"size": (640, 480)})
 picam2.configure(camera_config)
 picam2.start()
 
