@@ -1,3 +1,9 @@
+"""
+Title: Prototype for picamera interaction with led
+Author: Daniel
+Description: use picamera and sensehat libraries then adjust color based an action
+"""
+
 from picamera2 import Picamera2
 import time
 import cv2
