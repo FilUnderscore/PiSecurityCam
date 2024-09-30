@@ -1,3 +1,9 @@
+"""
+Title: Motion Detection Using HOG
+Author: Daniel
+Description: using cv2 to get hog and then use live camera as input
+"""
+
 # Import necessary packages
 import numpy as np
 import cv2
