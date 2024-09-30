@@ -1,3 +1,5 @@
+# Input: live camera
+
 import cv2
 import time
 from picamera2 import Picamera2
@@ -6,19 +8,20 @@ from picamera2 import Picamera2
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
-# Initialize Pi Camera
+# Initialize the Picamera2
 picam2 = Picamera2()
+
+# Configure the camera to the desired resolution
+camera_config = picam2.create_preview_configuration(main={"size": (1280, 720)})
+picam2.configure(camera_config)
 picam2.start()
 
 while True:
-    # Capture frame from Pi Camera
+    # Capture frame from the camera
     frame = picam2.capture_array()
 
     if frame is not None:
         start_time = time.time()
-
-        # Resize frame to improve frame rate (optional)
-        frame = cv2.resize(frame, (1280, 720))
 
         # Convert frame to grayscale for HOG detector
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -37,7 +40,7 @@ while True:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         # Display the frame with detected pedestrians
-        cv2.imshow("Pi Camera - Pedestrian Detection", frame)
+        cv2.imshow("PiCamera2 - Human Detection", frame)
 
     # Exit condition
     k = cv2.waitKey(1)
@@ -46,4 +49,4 @@ while True:
 
 # Cleanup
 cv2.destroyAllWindows()
-picam2.stop()
+picam2.close()
