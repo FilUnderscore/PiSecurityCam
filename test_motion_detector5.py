@@ -21,7 +21,7 @@ while True:
     r, frame = cap.read()
     if r:
         start_time = time.time()
-        frame = cv2.resize(frame,(1280, 720)) # Downscale to improve frame rate
+        frame = cv2.resize(frame,(320, 240)) # Downscale to improve frame rate
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # HOG needs a grayscale image
 
         rects, weights = hog.detectMultiScale(gray_frame)
