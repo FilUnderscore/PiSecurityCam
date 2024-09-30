@@ -5,6 +5,7 @@ Description: Use HOG model stored in xml file to draw boxes on the moving object
              the moving object is currently limited to pedestrian walking
              currently will need a sample test video, place in the same directory
              and also the model as xml, place in the same directory
+             Input: video.mov recorded file
 """
 
 import cv2
