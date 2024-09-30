@@ -28,7 +28,9 @@ picam2.start()
 while True:
     # Capture frame from the camera
     frame = picam2.capture_array()
-
+    
+    # Fix RGB to BGR to follow OpenCV display
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     if frame is not None:
         start_time = time.time()
 

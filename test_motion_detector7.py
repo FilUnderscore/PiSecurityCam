@@ -24,6 +24,9 @@ picam2.start()
 while True:
     # Capture a frame from the Raspberry Pi Camera Module
     frame = picam2.capture_array()
+    
+    # Fix RGB to BGR to follow OpenCV display
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
     # Start time to measure detection performance
     start_time = time.time()
