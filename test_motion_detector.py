@@ -9,12 +9,12 @@ Requirements: using LiteRT inference library and use efficientdet model saved as
 
 import cv2
 import numpy as np
-from ai_edge_litert.interpreter import Interpreter
+import tflite_runtime.interpreter as tflite
 from picamera2 import Picamera2
 
 # Load TFLite model and allocate tensors
 model_path = 'efficientdet.tflite'
-interpreter = Interpreter(model_path=model_path)
+interpreter = tflite.Interpreter(model_path=model_path)
 interpreter.allocate_tensors()
 
 # Get input and output details from the interpreter
@@ -27,21 +27,18 @@ picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
 picam2.start()
 
 def preprocess_image(frame, input_shape):
-    # Resize the frame to match model input
     resized_img = cv2.resize(frame, (input_shape[1], input_shape[2]))
-    # Convert the frame to UINT8 (the expected input type)
     input_data = np.array(resized_img, dtype=np.uint8)
-    # Add a batch dimension
     input_data = np.expand_dims(input_data, axis=0)
     return input_data
 
 while True:
     frame = picam2.capture_array()
 
-    # Preprocess the frame to match input requirements (UINT8)
+    # Preprocess the frame to match input requirements
     input_data = preprocess_image(frame, input_details[0]['shape'])
 
-    # Set the input tensor (UINT8 type now)
+    # Set the input tensor
     interpreter.set_tensor(input_details[0]['index'], input_data)
 
     # Run inference
@@ -73,7 +70,6 @@ while True:
     # Display the frame with the bounding boxes
     cv2.imshow('Live Human Detection', frame)
 
-    # Break the loop if 'q' is pressed
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
