@@ -12,6 +12,7 @@ import numpy as np
 from picamera2 import Picamera2
 import time
 
+
 # Set thresholds
 thres = 0.45
 nms_threshold = 0.2
