@@ -38,7 +38,10 @@ while True:
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 
         # Perform pedestrian detection
-        rects, weights = hog.detectMultiScale(gray_frame)
+        rects, weights = hog.detectMultiScale(
+            gray_frame,
+            scale=1.05
+        )
 
         # Measure elapsed time for detections
         end_time = time.time()
