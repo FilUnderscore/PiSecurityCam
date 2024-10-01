@@ -38,7 +38,8 @@ while True:
     rects = person_cascade.detectMultiScale(
         gray_frame,
         scaleFactor=1.01,  # Controls the scale of the image pyramid
-        minNeighbors=5,    # Rejects some rectangles based on quality
+        minNeighbors=4
+        ,    # Rejects some rectangles based on quality
         minSize=(30, 30),  # Minimum size of detected person
         maxSize=(300, 300) # Maximum size of detected person
     )
