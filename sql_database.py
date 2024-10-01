@@ -42,7 +42,7 @@ class SQLDatabase(Database):
         for column in columns:
             columns_str_builder.add_entry(column)
 
-        rows = cursor.execute("SELECT " + columns_str_builder.build() + " FROM " + table + whereClauseStr + ";").fetchall()
+        rows = self.execute_fetch("SELECT " + columns_str_builder.build() + " FROM " + table + whereClauseStr + ";")
 
         for row in rows:
             colIndex = 0
@@ -95,4 +95,7 @@ class SQLDatabase(Database):
         self.conn.commit()
 
     def does_table_exist(self, table):
+        pass
+    
+    def execute_fetch(self, statement):
         pass

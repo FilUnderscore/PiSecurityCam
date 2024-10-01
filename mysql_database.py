@@ -1,14 +1,15 @@
 from sql_database import SQLDatabase
 
-import mysql.connector
+import pymysql
 
 class MySQLDatabase(SQLDatabase):
     def __init__(self, host, username, password, database):
-        SQLDatabase.__init__(self, mysql.connector.connect(host=host, username=username, password=password, database=database))
+        SQLDatabase.__init__(self, pymysql.connect(host=host, user=username, password=password, db=database))
 
     def get_table_data(self, table):
         cursor = self.conn.cursor()
-        table_data = cursor.execute("DESCRIBE " + table + ";").fetchall()
+        cursor.execute("DESCRIBE " + table + ";")
+        table_data = cursor.fetchall()
 
         table_col_list = []
 
@@ -35,3 +36,8 @@ class MySQLDatabase(SQLDatabase):
         cursor = self.conn.cursor()
         table = cursor.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '" + table + "';")
         return cursor.fetchone()[0] == 1
+    
+    def execute_fetch(self, statement):
+        cursor = self.conn.cursor()
+        cursor.execute(statement)
+        return cursor.fetchall()

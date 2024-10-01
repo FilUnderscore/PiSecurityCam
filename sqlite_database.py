@@ -43,3 +43,6 @@ class SqliteDatabase(SQLDatabase):
             print("SqliteDatabase: An error occurred while attempting to check whether the table " + table + " exists.")
 
             return False
+    
+    def execute_fetch(self, statement):
+        return cursor.execute(statement).fetchall()
