@@ -1,4 +1,4 @@
-from sql_database import SQLDatabase
+from db.sql_database import SQLDatabase
 import sqlite3
 
 class SqliteDatabase(SQLDatabase):
@@ -45,4 +45,8 @@ class SqliteDatabase(SQLDatabase):
             return False
     
     def execute_fetch(self, statement):
+        cursor = self.conn.cursor()
         return cursor.execute(statement).fetchall()
+    
+    def online(self):
+        return True

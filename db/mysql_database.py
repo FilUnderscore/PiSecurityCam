@@ -1,4 +1,4 @@
-from sql_database import SQLDatabase
+from db.sql_database import SQLDatabase
 
 import pymysql
 
@@ -41,3 +41,10 @@ class MySQLDatabase(SQLDatabase):
         cursor = self.conn.cursor()
         cursor.execute(statement)
         return cursor.fetchall()
+    
+    def online(self):
+        try:
+            self.conn.ping()
+            return self.conn.open
+        except:
+            return False

@@ -17,3 +17,6 @@ class Database:
             return "INT"
         elif isinstance(data, datetime):
             return "DATETIME"
+    
+    def online(self):
+        pass
