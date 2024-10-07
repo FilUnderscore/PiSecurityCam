@@ -1,13 +1,5 @@
-[2:41:46.512559000] [13576]  INFO Camera camera_manager.cpp:325 libcamera v0.3.2+27-7330f29b
-[2:41:46.542973638] [13584]  WARN RPiSdn sdn.cpp:40 Using legacy SDN tuning - please consider moving SDN inside rpi.denoise
-[2:41:46.544862039] [13584]  WARN RPI vc4.cpp:393 Mismatch between Unicam and CamHelper for embedded data usage!
-[2:41:46.545474290] [13584]  INFO RPI vc4.cpp:447 Registered camera /base/soc/i2c0mux/i2c@1/imx219@10 to Unicam device /dev/media3 and ISP device /dev/media0
-[2:41:46.545531771] [13584]  INFO RPI pipeline_base.cpp:1126 Using configuration file '/usr/share/libcamera/pipeline/rpi/vc4/rpi_apps.yaml'
-[2:41:46.552797435] [13576]  INFO Camera camera.cpp:1197 configuring streams: (0) 720x360-BGR888 (1) 1920x1080-SBGGR10_CSI2P
-[2:41:46.555113960] [13584]  INFO RPI vc4.cpp:622 Sensor: /base/soc/i2c0mux/i2c@1/imx219@10 - Selected sensor format: 1920x1080-SBGGR10_1X10 - Selected unicam format: 1920x1080-pBAA
-QStandardPaths: wrong permissions on runtime directory /run/user/1000, 0770 instead of 0700
-libpng warning: iCCP: known incorrect sRGB profile
-libpng warning: iCCP: known incorrect sRGB profile
-libpng warning: iCCP: known incorrect sRGB profile
-libpng warning: iCCP: known incorrect sRGB profile
-libpng warning: iCCP: known incorrect sRGB profile
+>>> %Run test_live_camera.py
+[ WARN:0@0.321] global ./modules/videoio/src/cap_gstreamer.cpp (2401) handleMessage OpenCV | GStreamer warning: Embedded video playback halted; module v4l2src0 reported: Failed to allocate required memory.
+[ WARN:0@0.322] global ./modules/videoio/src/cap_gstreamer.cpp (1356) open OpenCV | GStreamer warning: unable to start pipeline
+[ WARN:0@0.322] global ./modules/videoio/src/cap_gstreamer.cpp (862) isPipelinePlaying OpenCV | GStreamer warning: GStreamer: pipeline have not been created
+Error: Failed to capture image.
