@@ -5,11 +5,19 @@
 	<body>
 		<center>
 			<h1>Front door security camera</h1>
+			{% if form_response %}
+			<p>{{ form_response }}</p>
+			{% endif %}
 			<form method="POST">
 				<input type="submit" name="capture_picture" value="Capture Picture">
-				<input type="submit" name="capture_video" value="Capture Video">
+				{% if video_capture == false %}
+				<input type="submit" name="start_capture_video" value="Start capturing video">
+				{% else %}
+				<input type="submit" name="stop_capture_video" value="Stop capturing video">
+				{% endif %}
 				<input type="submit" name="view_motion_history" value="View Motion History"?
 			</form>
+			<br/>
 			<iframe src="/video_feed" style="width:100%;height:100%;"/>
 		</center>
 	</body>

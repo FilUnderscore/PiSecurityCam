@@ -8,11 +8,22 @@ camera = PiCamera()
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
+        form_response = None
+        video_capture = False
+        
         if request.method == 'POST':
                 if request.form.get('capture_picture') == 'Capture Picture':
-                        print('SSHOT')
-        
-        return render_template('index.html')
+                        filename = camera.capture_picture()
+                        form_response = "Success, screenshot was saved to " + filename + "."
+                        print('Success')
+                elif request.form.get('start_capture_video') == 'Start capturing video':
+                        print('Capture')
+                elif request.form.get('stop_capture_video') == 'Stop capturing video':
+                        print('Stop capture')
+        else:
+                print('Request')
+
+        return render_template('index.html', form_response=form_response, video_capture=video_capture)
 
 @app.route("/test")
 def get_camera_feed():
