@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, jsonify, send_file
+from flask import Flask, render_template, Response, jsonify, send_file, request
 from camera import PiCamera
 import time
 from io import BytesIO
@@ -6,9 +6,13 @@ from io import BytesIO
 app = Flask(__name__)
 camera = PiCamera()
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def main():
-	return "Test"
+        if request.method == 'POST':
+                if request.form.get('capture_picture') == 'Capture Picture':
+                        print('SSHOT')
+        
+        return render_template('index.html')
 
 @app.route("/test")
 def get_camera_feed():
