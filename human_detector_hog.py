@@ -25,7 +25,7 @@ while True:
     frame = picam2.capture_array()
 
     # Convert frame to grayscale for HOG detector
-    gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Perform pedestrian detection
     rects, weights = hog.detectMultiScale(
