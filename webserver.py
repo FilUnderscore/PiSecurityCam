@@ -5,11 +5,12 @@ from io import BytesIO
 
 app = Flask(__name__)
 camera = PiCamera()
+video_capture = False
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
+        global video_capture
         form_response = None
-        video_capture = False
         
         if request.method == 'POST':
                 if request.form.get('capture_picture') == 'Capture Picture':
@@ -17,8 +18,14 @@ def main():
                         form_response = "Success, screenshot was saved to " + filename + "."
                         print('Success')
                 elif request.form.get('start_capture_video') == 'Start capturing video':
+                        camera.start_video_capture()
+                        video_capture = True
+                        form_response = "Started recording."
                         print('Capture')
                 elif request.form.get('stop_capture_video') == 'Stop capturing video':
+                        camera.stop_video_capture()
+                        video_capture = False
+                        form_response = "Stopped recording."
                         print('Stop capture')
         else:
                 print('Request')
