@@ -1,5 +1,5 @@
 """
-Status: 
+Status: Not working
 Title: Human walking motion detection
 Author: Daniel
 Description: Efficientdet model saved as tflite
