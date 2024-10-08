@@ -1,9 +1,3 @@
-"""
-Title: Prototype for picamera interaction with led
-Author: Daniel
-Description: use picamera and sensehat libraries then adjust color based an action
-"""
-
 from picamera2 import Picamera2
 import time
 import cv2
@@ -16,7 +10,6 @@ sense = SenseHat()
 # Define colors for Sense HAT LED matrix
 green = (0, 255, 0)
 red = (255, 0, 0)
-nothing = (0, 0, 0)
 
 # Turn the LED matrix to a specific color
 def set_led_color(color):
@@ -24,21 +17,14 @@ def set_led_color(color):
     sense.set_pixels(logo)
 
 # Configure the camera with the settings provided
-config = camera.create_still_configuration(
-    main={"size": (4056, 3040)},
-    lores={"size": (480, 320)},
-    display="lores",
-    buffer_count=3,
-    queue=False
-)
+config = camera.create_preview_configuration(main={"size": (640, 480)})
 camera.configure(config)
 
 try:
-    is_live = False  # Start with camera off
-    is_recording = False  # Start with not recording
+    is_live = False
+    is_recording = False
 
     while True:
-        # Display instructions for the user
         print("\nEnter 'l' to turn on camera (green)")
         print("Enter 'r' to capture an image (red)")
         print("Enter 's' to stop camera (green again)")
@@ -49,10 +35,11 @@ try:
         if user_input == 'l':
             if not is_live:
                 print("Turning camera live...")
-                camera.set_controls({"ExposureTime": 10000, "AnalogueGain": 5})  # Shutter time and signal boost
+                # Adjust the exposure time and gain to brighten the feed
+                camera.set_controls({"ExposureTime": 20000, "AnalogueGain": 10})
                 camera.start(show_preview=True)
-                set_led_color(green)  # LED turns green for live view
-                time.sleep(5)  # Enjoy the live preview for 5 seconds
+                set_led_color(green)
+                time.sleep(10)  # Increase sleep time to allow adjustment
                 is_live = True
             else:
                 print("Camera is already live.")
@@ -61,12 +48,12 @@ try:
             if is_live:
                 print("Capturing image...")
                 t_0 = time.monotonic()
-                img = camera.capture_array("lores")  # Captures an image
+                img = camera.capture_array("main")  # Use main instead of lores for full resolution
                 t_1 = time.monotonic()
                 print("Image captured in {} seconds.".format(round(t_1 - t_0, 3)))
                 print("Image width x height: {}".format(img.shape[0:2][::-1]))
-                set_led_color(red)  # LED turns red for recording
-                cv2.imshow("Captured Image", cv2.resize(img, (0, 0), fx=0.25, fy=0.25))  # Resize and display the image
+                set_led_color(red)
+                cv2.imshow("Captured Image", cv2.resize(img, (0, 0), fx=0.25, fy=0.25))
                 cv2.waitKey(0)  # Wait for a key press to close the image window
             else:
                 print("Please turn on the camera first by pressing 'l'")
@@ -74,8 +61,8 @@ try:
         elif user_input == 's':
             if is_live:
                 print("Stopping the camera and returning to live mode...")
-                camera.close()  # Stop the camera
-                set_led_color(green)  # Return LED to green after stopping
+                camera.close()
+                set_led_color(green)
                 is_live = False
             else:
                 print("The camera is not live. Please turn it on by pressing 'l'")
@@ -88,6 +75,6 @@ try:
 
 finally:
     if is_live:
-        camera.close()  # Ensure the camera is closed properly
-    sense.clear()  # Clear the LED matrix when done
-    cv2.destroyAllWindows()  # Close any open image windows
+        camera.close()
+    sense.clear()
+    cv2.destroyAllWindows()
