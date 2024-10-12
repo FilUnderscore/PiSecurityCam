@@ -1,5 +1,5 @@
 from flask import Flask, render_template, Response, request, redirect
-from camera import MotionPiCamera
+from camera import MotionPiCamera, CameraRecordState
 from db.sqlite_database import SqliteDatabase
 from base64 import b64encode
 from datetime import datetime
@@ -21,7 +21,7 @@ def main():
                         form_response = "Success, screenshot was saved to the database."
                         print('Success')
                 elif request.form.get('start_capture_video') == 'Start capturing video':
-                        camera.start_video_capture()
+                        camera.start_video_capture(CameraRecordState.MANUAL)
                         video_capture = True
                         form_response = "Started recording."
                         print('Capture')

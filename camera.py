@@ -8,6 +8,7 @@ import subprocess
 import os
 import cv2
 import numpy as np
+from enum import Enum
 
 encoder = H264Encoder()
 output = CircularOutput(buffersize=30*3)
@@ -21,9 +22,14 @@ def h264_to_mp4(file_path, output_file_path):
         print('Error occurred when converting h264 to mp4.')
         return False
 
+class CameraRecordState(Enum):
+    NOT_RECORDING = 0
+    MANUAL = 1
+    AUTOMATIC = 2
+
 class Camera:
     def __init__(self):
-        self.capturing_video = False
+        self.capturing_video = CameraRecordState.NOT_RECORDING
     
     def capture_frame(self):
         pass
@@ -38,23 +44,26 @@ class Camera:
     def stop_recording(self):
         pass
     
-    def start_video_capture(self):
-        if self.capturing_video == True:
+    def start_video_capture(self, state):
+        if self.capturing_video != CameraRecordState.NOT_RECORDING:
             return False
         
         # TODO capture video
         self.start_recording()
-        self.capturing_video = True
+        self.capturing_video = state
         return True
 
     def stop_video_capture(self):
-        if self.capturing_video == False:
+        if self.capturing_video == CameraRecordState.NOT_RECORDING:
             return False
 
         # TODO stop capturing video
         video_buffer = self.stop_recording()
-        self.capturing_video = False
+        self.capturing_video = CameraRecordState.NOT_RECORDING
         return video_buffer
+    
+    def is_recording(self):
+        return self.capturing_video != CameraRecordState.NOT_RECORDING
 
 class StreamingOutput(BufferedIOBase):
     def __init__(self, transform):
@@ -179,10 +188,10 @@ class MotionPiCamera(PiCamera):
         
         frame_with_motion = self.detect_motion(frame, gray, self.first_frame)
         
-        if self.capturing_video == False and self.motion_detected == True:
-            self.start_video_capture()
+        if self.capturing_video == CameraRecordState.NOT_RECORDING and self.motion_detected == True:
+            self.start_video_capture(CameraRecordState.AUTOMATIC)
             print('Start - we got motion')
-        elif self.capturing_video == True and self.motion_detected == False:
+        elif self.capturing_video == CameraRecordState.AUTOMATIC and self.motion_detected == False:
             video_buffer = self.stop_video_capture()
 
             if video_buffer != None:
