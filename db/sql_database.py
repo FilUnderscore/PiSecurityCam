@@ -26,6 +26,9 @@ class SQLDatabase(Database):
         print("SqliteDatabase: Inserted row into the '" + table + "' table.")
 
     def fetch(self, table, columns, whereClauseStr):
+        if not self.does_table_exist(table):
+            return []
+        
         entries = []
 
         table_data = self.get_table_data(table)
