@@ -79,7 +79,7 @@ def db_view():
                         return render_template('db.html', photos=photos)
                 elif request.form.get('view_videos') == 'View captured videos':
                         if request.form.get('motion'):
-                                video_data = database.fetch('videos', [], 'motion = \'true\'')
+                                video_data = database.select('videos', [], 'motion = \'true\'')
                         else:
                                 video_data = database.list('videos')
 
