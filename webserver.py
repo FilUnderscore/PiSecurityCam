@@ -1,12 +1,12 @@
 from flask import Flask, render_template, Response, request, redirect
-from camera import PiCamera
+from camera import MotionPiCamera
 from db.sqlite_database import SqliteDatabase
 from base64 import b64encode
 from datetime import datetime
 
 app = Flask(__name__)
 database = SqliteDatabase("test.db")
-camera = PiCamera()
+camera = MotionPiCamera(database)
 video_capture = False
 
 @app.route("/", methods=['GET', 'POST'])
@@ -27,14 +27,19 @@ def main():
                         print('Capture')
                 elif request.form.get('stop_capture_video') == 'Stop capturing video':
                         video_buffer = camera.stop_video_capture()
-                        database.insert("videos", {"timestamp": datetime.strftime(datetime.now(), '%d-%m-%Y %H:%M:%S'), "video": video_buffer.read().hex()})
+
+                        if video_buffer != None:
+                                database.insert("videos", {"timestamp": datetime.strftime(datetime.now(), '%d-%m-%Y %H:%M:%S'), "video": video_buffer.read().hex()}, "motion": "false")
+                                form_response = "Stopped recording."
+                        else:
+                                form_response = "Failed to save recording."
                         video_capture = False
-                        form_response = "Stopped recording."
                         print('Stop capture')
-                elif request.form.get('view_motion_history') == 'View Motion History':
-                        return redirect('/motion')
                 elif request.form.get('view_capture_history') == 'View captures':
                         return redirect('/db')
+                elif request.form.get('recalibrate_motion') == 'Recalibrate motion detector':
+                        camera.reset_first_frame()
+                        form_response = "Recalibrated motion detector."
         else:
                 print('Request')
 
@@ -73,7 +78,11 @@ def db_view():
 
                         return render_template('db.html', photos=photos)
                 elif request.form.get('view_videos') == 'View captured videos':
-                        video_data = database.list('videos')
+                        if request.form.get('motion'):
+                                video_data = database.fetch('videos', [], 'motion = \'true\'')
+                        else:
+                                video_data = database.list('videos')
+
                         videos = []
 
                         for video in video_data:
