@@ -38,7 +38,6 @@ class Camera:
 
     def capture_picture(self):
         frame = self.capture_frame(False)
-        self.led.set_yellow()  # Blink Yellow for image capture
         return frame
 
     def start_recording(self):
@@ -54,7 +53,7 @@ class Camera:
         # TODO capture video
         self.start_recording()
         if state == CameraRecordState.MANUAL:
-            self.led.blink_yellow()  # Blink Yellow and Black for manual recording
+            print("Manual Recording Started")
         else:
             self.led.set_red()  # Red LED for automatic motion-based recording
         self.capturing_video = state
