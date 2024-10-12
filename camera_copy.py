@@ -9,7 +9,6 @@ import os
 import cv2
 import numpy as np
 from enum import Enum
-from senseHatLED import SenseHatLED 
 
 encoder = H264Encoder()
 output = CircularOutput(buffersize=30*3)
@@ -31,14 +30,12 @@ class CameraRecordState(Enum):
 class Camera:
     def __init__(self):
         self.capturing_video = CameraRecordState.NOT_RECORDING
-        self.led = SenseHatLED()  # Initialize the SenseHatLED instance
     
     def capture_frame(self):
         pass
 
     def capture_picture(self):
         frame = self.capture_frame(False)
-        self.led.set_yellow()  # Blink Yellow for image capture
         return frame
 
     def start_recording(self):
@@ -53,10 +50,6 @@ class Camera:
         
         # TODO capture video
         self.start_recording()
-        if state == CameraRecordState.MANUAL:
-            self.led.blink_yellow()  # Blink Yellow and Black for manual recording
-        else:
-            self.led.set_red()  # Red LED for automatic motion-based recording
         self.capturing_video = state
         return True
 
@@ -67,7 +60,6 @@ class Camera:
         # TODO stop capturing video
         video_buffer = self.stop_recording()
         self.capturing_video = CameraRecordState.NOT_RECORDING
-        self.led.set_green()  # Set LED to green after stopping recording
         return video_buffer
     
     def is_recording(self):
@@ -104,8 +96,6 @@ class PiCamera(Camera):
         self.picam2.start_encoder(self.encoder)
         self.picam2.start_recording(encoder, output)
         self.picam2.start()
-
-        self.led.set_green()  # Set LED to green when the camera is turned on
 
     def capture_frame(self, transformed = True):        
         with self.streamOut.condition:
