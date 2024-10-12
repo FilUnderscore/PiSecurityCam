@@ -3,6 +3,7 @@
 
 import cv2
 import time
+import numpy as np
 from picamera2 import Picamera2
 
 # Load YOLO model
