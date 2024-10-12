@@ -27,15 +27,12 @@ class SQLDatabase(Database):
 
     def fetch(self, table, columns, whereClauseStr):
         entries = []
-        data = {}
 
         table_data = self.get_table_data(table)
 
         if len(columns) == 0:
             for column in range(0, len(table_data)):
                 columns.append(table_data[column]["name"])
-
-        cursor = self.conn.cursor()
 
         columns_str_builder = CSSBuilder()
 
@@ -46,9 +43,11 @@ class SQLDatabase(Database):
 
         for row in rows:
             colIndex = 0
+            data = {}
 
             for column in range(0, len(table_data)):
                 if table_data[column]["name"] not in columns:
+                    print('skip')
                     continue
 
                 data[table_data[column]["name"]] = row[colIndex]

@@ -17,6 +17,8 @@ class Database:
             return "INT"
         elif isinstance(data, datetime):
             return "DATETIME"
+        else:
+            return "BLOB"
     
     def online(self):
         pass

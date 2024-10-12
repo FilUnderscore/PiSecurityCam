@@ -3,7 +3,7 @@ import sqlite3
 
 class SqliteDatabase(SQLDatabase):
     def __init__(self, file_path):
-        SQLDatabase.__init__(self, sqlite3.connect(file_path))
+        SQLDatabase.__init__(self, sqlite3.connect(file_path, check_same_thread=False))
 
     def get_table_data(self, table):
         cursor = self.conn.cursor()
