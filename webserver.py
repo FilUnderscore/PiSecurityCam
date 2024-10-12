@@ -29,7 +29,7 @@ def main():
                         video_buffer = camera.stop_video_capture()
 
                         if video_buffer != None:
-                                database.insert("videos", {"timestamp": datetime.strftime(datetime.now(), '%d-%m-%Y %H:%M:%S'), "video": video_buffer.read().hex()}, "motion": "false")
+                                database.insert("videos", {"timestamp": datetime.strftime(datetime.now(), '%d-%m-%Y %H:%M:%S'), "video": video_buffer.read().hex(), "motion": "false"})
                                 form_response = "Stopped recording."
                         else:
                                 form_response = "Failed to save recording."

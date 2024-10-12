@@ -186,7 +186,7 @@ class MotionPiCamera(PiCamera):
             video_buffer = self.stop_video_capture()
 
             if video_buffer != None:
-                self.database.insert("videos", {"timestamp": datetime.strftime(datetime.now(), '%d-%m-%Y %H:%M:%S'), "video": video_buffer.read().hex()}, "motion": "true")
+                self.database.insert("videos", {"timestamp": datetime.strftime(datetime.now(), '%d-%m-%Y %H:%M:%S'), "video": video_buffer.read().hex(), "motion": "true"})
             
             print('Stop - no more motion')
 
