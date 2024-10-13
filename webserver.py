@@ -45,8 +45,11 @@ def main():
                 elif request.form.get('view_capture_history') == 'View captures':
                         return redirect('/db')
                 elif request.form.get('recalibrate_motion') == 'Recalibrate motion detector':
-                        webserver_instance.app.recalibrate_motion_detector()
-                        form_response = "Recalibrated motion detector."
+                        try:
+                                webserver_instance.app.recalibrate_motion_detector()
+                                form_response = "Recalibrated motion detector."
+                        except AttributeError:
+                                form_response = "This camera does not support motion detection."
         
         return render_template('index.html', form_response=form_response, video_capture=video_capture)
 

@@ -12,7 +12,7 @@ class Camera:
     def __init__(self):
         self.capturing_video = CameraRecordState.NOT_RECORDING
     
-    def capture_frame(self):
+    def capture_frame(self, transformed = True):
         pass
 
     def capture_picture(self):
@@ -80,7 +80,7 @@ class DebugCamera(Camera):
 
         return DebugCamera.color_lerp(current_color, next_color, (time() % (self.cycle_time / len(self.colors))) / (self.cycle_time / len(self.colors)))
 
-    def capture_frame(self):
+    def capture_frame(self, transformed):
         current_color = self.get_current_color()
         return cv2.imencode('.jpeg', (np.zeros([480,720,3],dtype=np.uint8) + current_color))[1].tobytes()
     

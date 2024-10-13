@@ -32,13 +32,13 @@ class App:
         self.camera.recalibrate_motion_detector()
     
     def capture_frame(self):
-        return self.camera.capture_frame()
+        return self.camera.capture_frame(True)
     
     def get_captured_photos(self):
         return self.database.list('photos')
     
     def get_captured_videos(self, motion):
         if motion:
-            return self.database.fetch('videos', [], 'motion = \'true\'')
+            return self.database.select('videos', [], 'motion = \'true\'')
         else:
             return self.database.list('videos')

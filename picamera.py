@@ -58,7 +58,7 @@ class PiCamera(Camera):
         self.led = SenseHatLED()  # Initialize the SenseHatLED instance
         self.led.set_green()  # Set LED to green when the camera is turned on
 
-    def capture_frame(self, transformed = True):        
+    def capture_frame(self, transformed):
         with self.streamOut.condition:
             self.streamOut.condition.wait()
 
@@ -95,13 +95,6 @@ class PiCamera(Camera):
             return buffer
         else:
             return None
-
-class DebugCamera(Camera):
-    def __init__(self):
-        pass
-
-    def capture_frame(self):
-        pass
 
 class MotionPiCamera(PiCamera):
     first_frame = None
