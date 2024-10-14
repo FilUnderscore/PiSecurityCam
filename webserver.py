@@ -14,7 +14,7 @@ class Webserver:
                         return
 
                 webserver_instance = self
-                flask_app.run()
+                flask_app.run(host="0.0.0.0", port=80)
 
 flask_app = Flask(__name__)
 video_capture = False
