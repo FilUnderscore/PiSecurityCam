@@ -1,4 +1,5 @@
 from db.sql_database import SQLDatabase
+from db.database import Database
 
 import pymysql
 
@@ -48,3 +49,9 @@ class MySQLDatabase(SQLDatabase):
             return self.conn.open
         except:
             return False
+
+    def get_db_type(self, data):
+        if isinstance(data, str):
+            return "LONGTEXT"
+        else:
+            return Database.get_db_type(self, data)

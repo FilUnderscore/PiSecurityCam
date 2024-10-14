@@ -35,6 +35,8 @@ class StreamingOutput(BufferedIOBase):
 
             if self.transform != None:
                 self.transformed_frame = self.transform(buf)
+            else:
+                self.transformed_frame = self.frame
             
             self.condition.notify_all()
 

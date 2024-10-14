@@ -12,7 +12,7 @@ class Database:
 
     def get_db_type(self, data):
         if isinstance(data, str):
-            return "VARCHAR(255)"
+            return "TEXT"
         elif isinstance(data, int):
             return "INT"
         elif isinstance(data, datetime):
