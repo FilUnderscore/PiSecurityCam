@@ -163,5 +163,5 @@ class MotionPiCamera(PiCamera):
 
         return cv2.imencode('.jpg', frame_with_motion)[1].tobytes()
     
-    def reset_first_frame(self):
+    def recalibrate_motion_detector(self):
         self.first_frame = None
