@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>Front door security camera</title>
+	</head>
+	<body>
+		<center>
+			<h1>Front door security camera</h1>
+			{% if form_response %}
+			<p>{{ form_response }}</p>
+			{% endif %}
+			<form method="POST">
+				<input type="submit" name="capture_picture" value="Capture Picture">
+				{% if video_capture == false %}
+				<input type="submit" name="start_capture_video" value="Start capturing video">
+				{% else %}
+				<input type="submit" name="stop_capture_video" value="Stop capturing video">
+				{% endif %}
+				<input type="submit" name="view_capture_history" value="View captures"/>
+				<input type="submit" name="recalibrate_motion" value="Recalibrate motion detector"/>
+			</form>
+			<br/>
+			<iframe src="/video_feed" width="720" height="480"/>
+		</center>
+	</body>
+</html>

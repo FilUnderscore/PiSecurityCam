@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<title>Database - Front door security camera</title>
+	</head>
+	<body>
+		<center>
+			<h1>Database</h1>
+			<form method="POST">
+				<input type="submit" name="live_feed" value="Back to live feed">
+				<input type="submit" name="view_photos" value="View captured photos">
+				<input type="submit" name="view_videos" value="View captured videos">
+				<input type="checkbox" name="motion" value="Motion detected">
+				<label for="motion">Motion detected</label>
+			</form>
+			{% if photos %}
+			<table>
+			<tr>
+				<th>Timestamp</th>
+				<th>Photo</th>
+			</tr>
+			{% for photo in photos %}
+			<tr>
+				<td>{{photo.timestamp}}</td>
+				<td><img src="data:image/jpeg;charset=utf-8;base64,{{photo.image_data}}"/></td>
+			</tr>
+			{% endfor %}
+			</table>
+			{% endif %}
+			{% if videos %}
+			<table>
+			<tr>
+				<th>Timestamp</th>
+				<th>Video</th>
+			</tr>
+			{% for video in videos %}
+			<tr>
+				<td>{{video.timestamp}}</td>
+				<td>
+					<div content="Content-Type: video/mp4">
+						<video width="700" height="450" controls="controls" poster="image" preload="metadata">
+							<source src="data:video/mp4;base64,{{video.video_data}}"/>
+						</video>
+					</div>
+				</td>
+			</tr>
+			{% endfor %}
+			</table>
+			{% endif %}
+		</center>
+	</body>
+</html>
